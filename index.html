@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>WANS FISHIT</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- SweetAlert -->
+  <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
@@ -15,94 +15,187 @@
       background: linear-gradient(to bottom, #0f2a44, #1b3f5f);
       color: white;
       text-align: center;
+      overflow-x: hidden;
     }
+
+    /* background glow subtle */
+    .bg-glow {
+      position: fixed;
+      inset: -40vh -40vw auto -40vw;
+      height: 80vh;
+      filter: blur(60px);
+      opacity: 0.35;
+      background: radial-gradient(circle at 30% 30%, rgba(70,160,255,.8), transparent 55%),
+                  radial-gradient(circle at 70% 50%, rgba(255,200,0,.35), transparent 60%);
+      pointer-events: none;
+      animation: floatGlow 8s ease-in-out infinite;
+    }
+    @keyframes floatGlow {
+      0%,100% { transform: translateY(0px); }
+      50% { transform: translateY(18px); }
+    }
+
     .container {
       max-width: 420px;
-      margin: 30px auto;
-      padding: 20px;
+      margin: 26px auto;
+      padding: 22px 20px 30px;
+      position: relative;
+    }
+
+    /* entry animations */
+    .logo-wrap {
+      width: 128px;
+      height: 128px;
+      margin: 18px auto 10px;
+      border-radius: 50%;
+      border: 4px solid rgba(255,255,255,0.9);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      overflow: hidden;
+      transform: scale(0.85);
+      opacity: 0;
+      animation: popIn 700ms cubic-bezier(.2,.9,.2,1) forwards;
     }
     .logo {
-      width: 120px;
-      margin: 20px auto;
-      border-radius: 50%;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
+    @keyframes popIn {
+      to { transform: scale(1); opacity: 1; }
+    }
+
     h1 {
-      margin: 10px 0;
+      margin: 10px 0 8px;
+      letter-spacing: 1px;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: riseIn 650ms ease forwards;
+      animation-delay: 120ms;
     }
+    @keyframes riseIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     .warning {
       color: #ffcc00;
       font-size: 14px;
-      margin-bottom: 20px;
+      line-height: 1.35;
+      margin: 0 auto 18px;
+      max-width: 360px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(0,0,0,0.18);
+      backdrop-filter: blur(6px);
+      opacity: 0;
+      transform: translateY(10px);
+      animation: riseIn 650ms ease forwards;
+      animation-delay: 220ms;
     }
+
     .btn {
       display: block;
       background: #ffffff;
       color: #1a4ed8;
-      padding: 14px;
+      padding: 14px 14px;
       margin: 12px 0;
-      border-radius: 10px;
-      font-weight: bold;
+      border-radius: 12px;
+      font-weight: 800;
       text-decoration: none;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.20);
+      cursor: pointer;
+
+      /* initial state for stagger */
+      opacity: 0;
+      transform: translateY(14px);
+      animation: btnIn 520ms ease forwards;
     }
+    @keyframes btnIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* stagger delays */
+    .btn.d1 { animation-delay: 320ms; }
+    .btn.d2 { animation-delay: 390ms; }
+    .btn.d3 { animation-delay: 460ms; }
+    .btn.d4 { animation-delay: 530ms; }
+    .btn.d5 { animation-delay: 600ms; }
+
+    /* tap / hover effects */
+    .btn:active {
+      transform: translateY(0) scale(0.98);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.18);
+    }
+    .btn:hover {
+      filter: brightness(0.98);
+    }
+
     .footer {
-      margin-top: 30px;
-      opacity: 0.85;
+      margin-top: 26px;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: riseIn 650ms ease forwards;
+      animation-delay: 720ms;
     }
     .icon {
       font-size: 26px;
       margin: 0 10px;
       color: white;
       text-decoration: none;
+      display: inline-block;
+      transform: translateY(0);
+      transition: transform 120ms ease;
     }
+    .icon:active { transform: translateY(1px) scale(0.98); }
   </style>
 </head>
+
 <body>
+  <div class="bg-glow"></div>
 
-<div class="container">
+  <div class="container">
+    <div class="logo-wrap">
+      <img src="logo.png" class="logo" alt="WANS FISHIT" />
+    </div>
 
-  <!-- logo optional -->
-  <img src="logo.png" class="logo" alt="WANS FISHIT">
+    <h1>WANS FISHIT</h1>
 
-  <h1>WANS FISHIT</h1>
+    <div class="warning">
+      ⚠️ <b>WAJIB BACA SEBELUM GACHA</b> ⚠️<br />
+      Pastikan nominal sesuai pilihan<br />
+      Isi nama sesuai <b>nama TikTok</b> saat pembayaran
+    </div>
 
-  <div class="warning">
-    ⚠️ <b>WAJIB BACA SEBELUM GACHA</b> ⚠️<br>
-    Pastikan nominal sesuai pilihan<br>
-    Nanti isi nama tiktok kamu ya <b>😽</b>
+    <a class="btn d1" onclick="konfirmasi()">Foto A - Rp150.000</a>
+    <a class="btn d2" onclick="konfirmasi()">Foto B - Rp100.000</a>
+    <a class="btn d3" onclick="konfirmasi()">Foto C - Rp50.000</a>
+    <a class="btn d4" onclick="konfirmasi()">Foto D - Rp25.000</a>
+    <a class="btn d5" onclick="konfirmasi()">Foto E - Rp10.000</a>
+
+    <div class="footer">
+      <a class="icon" href="https://wa.me/6281378821654">📱</a>
+      <a class="icon" href="https://tiktok.com/@wansfish">🎵</a>
+    </div>
   </div>
 
-  <a class="btn" onclick="konfirmasi()">Foto A - Rp150.000</a>
-  <a class="btn" onclick="konfirmasi()">Foto B - Rp100.000</a>
-  <a class="btn" onclick="konfirmasi()">Foto C - Rp50.000</a>
-  <a class="btn" onclick="konfirmasi()">Foto D - Rp25.000</a>
-  <a class="btn" onclick="konfirmasi()">Foto E - Rp10.000</a>
-
-  <div class="footer">
-    <a class="icon" href="https://wa.me/6281378821654">📱</a>
-    <a class="icon" href="https://tiktok.com/@wansfish">🎵</a>
-  </div>
-
-</div>
-
-<script>
-function konfirmasi() {
-  Swal.fire({
-    icon: "warning",
-    title: "Konfirmasi",
-    html: `
-      Pastikan <b>nominal yang kamu bayar sesuai</b>.<br>
-      Isi <b>nama TikTok: wansfish</b> saat pembayaran.
-    `,
-    showCancelButton: true,
-    cancelButtonText: "Batal",
-    confirmButtonText: "Lanjutkan"
-  }).then((result) => {
-    if (result.isConfirmed) {
-      window.location.href = "https://sociabuzz.com/onlyfishit/donate";
+  <script>
+    function konfirmasi() {
+      Swal.fire({
+        icon: "warning",
+        title: "Konfirmasi",
+        html: `
+          Pastikan <b>nominal yang kamu bayar sesuai</b>.<br>
+          Isi <b>nama sesuai nama TikTok</b> saat pembayaran.
+        `,
+        showCancelButton: true,
+        cancelButtonText: "Batal",
+        confirmButtonText: "Lanjutkan",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = "https://sociabuzz.com/onlyfishit/donate";
+        }
+      });
     }
-  });
-}
-</script>
-
+  </script>
 </body>
 </html>
